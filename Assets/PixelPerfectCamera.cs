@@ -16,6 +16,14 @@
  * 
  */
 
+/**
+ * For this Script thanks to:
+ * 
+ * http://aidtech-game.com/pixel-perfect-camera-unity-2d/
+ * bu Alan Mcklin
+ * 
+ */
+
 using UnityEngine;
 
 using System.Collections;
