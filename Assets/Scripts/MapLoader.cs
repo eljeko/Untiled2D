@@ -25,8 +25,12 @@ class MapLoader : MonoBehaviour
 {
     public KeyCode printInfoKey;
     public KeyCode generateTiles;
+    public KeyCode moveRight;
+    public KeyCode moveLeft;
     public KeyCode drawMap;
     public GUIText infolabel;
+    public Camera camera;
+    //
     private Map map;
     //
     private Texture2D tilesTexture;
@@ -85,6 +89,15 @@ class MapLoader : MonoBehaviour
                 DrawMap (0, 0);
             }
         }
+
+        if (Input.GetKeyDown (moveLeft)) {          
+            camera.transform.position = new Vector2 (camera.transform.position.x + TILEWIDTH/100f, 0.0f);   
+        }
+
+        if (Input.GetKeyDown (moveRight)) {          
+            camera.transform.position = new Vector2 (camera.transform.position.x - TILEWIDTH/100f, 0.0f);   
+        }
+
 
     }
 
@@ -206,7 +219,7 @@ class MapLoader : MonoBehaviour
                 row = (int)Math.Ceiling (i);
             } else {
                 col = tiles_cols - 1;
-                row = (int)Math.Ceiling (i)-1;
+                row = (int)Math.Ceiling (i) - 1;
             }
         
             int tile_x = col * TILEWIDTH;
@@ -238,7 +251,7 @@ class MapLoader : MonoBehaviour
         //no ansiotropic stuff
         aTileTexture.anisoLevel = 1;
         //we preserve transparency
-        aTileTexture.alphaIsTransparency = true;
+//        aTileTexture.alphaIsTransparency = true;
         // important to save changes
         aTileTexture.Apply ();       
         return aTileTexture;
