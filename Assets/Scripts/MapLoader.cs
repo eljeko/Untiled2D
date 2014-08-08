@@ -36,9 +36,7 @@ class MapLoader : MonoBehaviour
  
     void Start ()
     {
-        //  int tileCountX = tilesTexture.width / TILEWIDTH;
-        //  int tileCountY = tilesTexture.height / TILEHEIGHT;
-        
+
         string xmldata = System.IO.File.ReadAllText (Application.streamingAssetsPath + "/Maps/platformmap.tmx");
 
         //Debug.Log ("Loaded following XML " + xmldata);
@@ -75,8 +73,9 @@ class MapLoader : MonoBehaviour
 
         if (Input.GetKeyDown (generateTiles)) {          
             if (infolabel != null) {
-                infolabel.text = "Loaded Prefabs ";
-                CreatePrefabs ();
+                int gid = 16;
+                infolabel.text = "Created tile gid: " + gid;
+                CreateTile (gid, 0.0f, 0.0f, 0.0f, TILEWIDTH, TILEHEIGHT, tilesparent);   
             }
         }
 
@@ -98,7 +97,7 @@ class MapLoader : MonoBehaviour
         float TILEWIDTH_to_world_units = TILEWIDTH / 100f;
         float TILEHEIGHT_to_world_units = TILEHEIGHT / 100f;
     
-        int currentLayer = map.GetLayers().Count;
+        int currentLayer = map.GetLayers ().Count;
 
         foreach (Layer aLayer in map.GetLayers()) { 
             int currentRow = 0;
@@ -108,14 +107,13 @@ class MapLoader : MonoBehaviour
             GameObject layerparent = Instantiate (Resources.Load ("Dummy")) as GameObject;
             layerparent.name = aLayer.name;
 
-            Debug.Log("Drawing " + aLayer.name);
+            Debug.Log ("Drawing " + aLayer.name);
 
             foreach (Tile aTile in aLayer.getTiles()) {
                 if (aTile.gid != 0) {
                     xPos = offsetx + (currentCol * TILEWIDTH_to_world_units);
                     yPos = offsety + (currentRow * TILEHEIGHT_to_world_units * -1);                    
-                    //Debug.Log ("Tile g["+aTile.Gid+"]  x:" + xPos + " y:" + yPos+ " ["+currentRow+":"+currentCol+"]");
-                    CreateTile (aTile.gid, xPos, yPos,currentLayer, TILEWIDTH, TILEHEIGHT, layerparent);  
+                    CreateTile (aTile.gid, xPos, yPos, currentLayer, TILEWIDTH, TILEHEIGHT, layerparent);  
                 }
                 
                 if (currentCol < width - 1) {
@@ -173,77 +171,76 @@ class MapLoader : MonoBehaviour
   
     private void CreatePrefabs ()
     {             
-        CreateTile (21, 0.0f, 0.0f,0.0f, TILEWIDTH, TILEHEIGHT, tilesparent);    
+
     }
 
+    /// 
     /// <summary> 
-    /// Enter description for method bb. 
-    /// ID string generated is "M:N.X.bb(System.String,System.Int32@,System.Void*)".
+    /// Summary
     /// </summary> 
+    /// 
     /// <param name="gid">Describe parameter.</param>
     /// <param name="x">Describe parameter.</param>
     /// <param name="y">Describe parameter.</param>
+    /// <param name="z">Describe parameter.</param>
     /// <param name="TILEWIDTH">Describe parameter.</param>
     /// <param name="TILEHEIGHT">Describe parameter.</param>
     /// <param name="tilesparent">Describe parameter.</param>
-    void CreateTile (int gid, float x, float y,float z, int TILEWIDTH, int TILEHEIGHT, GameObject tilesparent)
+    /// 
+    void CreateTile (int gid, float x, float y, float z, int TILEWIDTH, int TILEHEIGHT, GameObject tilesparent)
     {
 
         if (gid > 0) {
             int tiles_cols = map.imagewidth / TILEWIDTH;
             int tiles_rows = map.imageheight / TILEHEIGHT;
-        
-            decimal i = gid / tiles_cols;
-            int row = (int)Math.Ceiling (i);
-        
-            int moduleRows = gid % tiles_cols;
-        
+
+            int row = 0;
             int col = 0;   
+
+            decimal i = gid / tiles_cols;
+
+            int moduleRows = gid % tiles_cols;
         
             if (moduleRows > 0) {
                 col = moduleRows - 1;
+                row = (int)Math.Ceiling (i);
             } else {
                 col = tiles_cols - 1;
+                row = (int)Math.Ceiling (i)-1;
             }
         
             int tile_x = col * TILEWIDTH;
             int tile_y = map.imageheight - ((row * TILEHEIGHT) + TILEHEIGHT);
 
-            //Texture2D tileTexture = getTileTexture2D (tile_x, tile_y, TILEWIDTH, TILEHEIGHT); 
-
-
             GameObject newTile = Instantiate (Resources.Load ("Dummy")) as GameObject;
-
             newTile.name = "Tile g:" + gid + " at (" + x + ":" + y + ")";
+
             SpriteRenderer renderer = newTile.AddComponent<SpriteRenderer> ();
-
-            //Sprite sprite = Sprite.Create (tileTexture, new Rect (0, 0, TILEWIDTH, TILEHEIGHT), new Vector2 (0f, 0f), 100);
             Sprite sprite = Sprite.Create (tilesTexture, new Rect (tile_x, tile_y, TILEWIDTH, TILEHEIGHT), new Vector2 (0f, 0f), 100);
-
             //we want pixelperfect!
-            sprite.texture.filterMode = FilterMode.Point;//This disable the antialias filter
-            //in unity 2D always 100
-            sprite.name = "Demo";
+            sprite.texture.filterMode = FilterMode.Point;//This disable the antialias filter         
+            sprite.name = "Tile Sprite gid:" + gid;
             renderer.sprite = sprite;
-            newTile.transform.position = new Vector3 (x, y, z);
 
+            newTile.transform.position = new Vector3 (x, y, z);
             newTile.transform.parent = tilesparent.transform;
 
-//            newTile.transform.localScale = new Vector3(0.16f,0.16f,0f);
         }
     }
 
     public Texture2D getTileTexture2D (int x, int y, int width, int height)
     {
-        Color[] pixels = tilesTexture.GetPixels (x, y, width, height);
         // get the block of pixels
+        Color[] pixels = tilesTexture.GetPixels (x, y, width, height);
+        // create new texture to copy the pixels into
         Texture2D aTileTexture = new Texture2D (width, height);
-        // create new texture to copy the pixels to it
         aTileTexture.SetPixels (pixels);
+        //no ansiotropic stuff
         aTileTexture.anisoLevel = 1;
+        //we preserve transparency
         aTileTexture.alphaIsTransparency = true;
-        aTileTexture.Apply ();
         // important to save changes
+        aTileTexture.Apply ();       
         return aTileTexture;
     }
 

@@ -23,7 +23,6 @@
  * bu Alan Mcklin
  * 
  */
-
 using UnityEngine;
 
 using System.Collections;
@@ -34,13 +33,15 @@ public class PixelPerfectCamera : MonoBehaviour
 
     float unitsPerPixel;
     public float textureUnitsSize = 100f;
+    //this will let you do  a 2x,3x,4x perfecet pixel Zoom.
+    public int multiplier = 1;
 
     void Start ()
     {
         
         unitsPerPixel = 1f / textureUnitsSize;
         
-        Camera.main.orthographicSize = (Screen.height / 2f) * unitsPerPixel;
+        Camera.main.orthographicSize = ((Screen.height / 2f) * unitsPerPixel) / multiplier;
         
     }
     
