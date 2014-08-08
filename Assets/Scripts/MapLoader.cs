@@ -250,8 +250,6 @@ class MapLoader : MonoBehaviour
         aTileTexture.SetPixels (pixels);
         //no ansiotropic stuff
         aTileTexture.anisoLevel = 1;
-        //we preserve transparency
-//        aTileTexture.alphaIsTransparency = true;
         // important to save changes
         aTileTexture.Apply ();       
         return aTileTexture;
