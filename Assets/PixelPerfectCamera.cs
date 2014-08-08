@@ -20,18 +20,17 @@ using UnityEngine;
 
 using System.Collections;
 
-public class PixelPerfect : MonoBehaviour
+public class PixelPerfectCamera : MonoBehaviour
 {
     
-    public float textureSize = 100f;
+
     float unitsPerPixel;
-    
-    // Use this for initialization
-    
+    public float textureUnitsSize = 100f;
+
     void Start ()
     {
         
-        unitsPerPixel = 1f / textureSize;
+        unitsPerPixel = 1f / textureUnitsSize;
         
         Camera.main.orthographicSize = (Screen.height / 2f) * unitsPerPixel;
         
