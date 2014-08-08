@@ -36,6 +36,7 @@ namespace Untiled2D
         public int tilewidth { get; set; }
 
         private  List<Layer>  layers = new  List<Layer> ();
+        private  List<ObjectGroup>  objectGroups = new  List<ObjectGroup> ();
 
         public string version { get; set; }
 
@@ -66,10 +67,15 @@ namespace Untiled2D
         {
             return layers [i];
         }
+
+        public void AddPbjectGroup (ObjectGroup objectGroup)
+        {
+            objectGroups.Add (objectGroup);
+        }
         
         public override string ToString ()
         {
-            return "v: " + version + " w:" + this.width + " h:" + this.height + " layers: " + layers.Count;
+            return "v: " + version + " w:" + this.width + " h:" + this.height + " layers: " + layers.Count + " ObjectGroup: " + objectGroups.Count;
         }
         
 

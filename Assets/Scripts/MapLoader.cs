@@ -32,6 +32,10 @@ class MapLoader : MonoBehaviour
     public Camera camera;
     //
     private Map map;
+    public string mapFileName;
+    public int startOffsetX = 0;
+    public int startOffsetY = 0;
+    public bool drawOnStrat = false;
     //
     private Texture2D tilesTexture;
     private GameObject tilesparent;
@@ -41,7 +45,7 @@ class MapLoader : MonoBehaviour
     void Start ()
     {
 
-        string xmldata = System.IO.File.ReadAllText (Application.streamingAssetsPath + "/Maps/platformmap.tmx");
+        string xmldata = System.IO.File.ReadAllText (Application.streamingAssetsPath + "/Maps/" + mapFileName);
 
         //Debug.Log ("Loaded following XML " + xmldata);
     
@@ -62,6 +66,10 @@ class MapLoader : MonoBehaviour
         tilesparent.name = "TileMap [" + map.imagesrc + "]";
 
         tilesparent.transform.position = new Vector3 (0, 0, 0.0f);
+
+        if (drawOnStrat) {
+            DrawMap (startOffsetX, startOffsetY);
+        }
         
     }
     
@@ -86,16 +94,16 @@ class MapLoader : MonoBehaviour
         if (Input.GetKeyDown (drawMap)) {          
             if (infolabel != null) {
                 infolabel.text = "Draw Map";
-                DrawMap (0, 0);
+                DrawMap (startOffsetX, startOffsetY);
             }
         }
 
         if (Input.GetKeyDown (moveLeft)) {          
-            camera.transform.position = new Vector2 (camera.transform.position.x + TILEWIDTH/100f, 0.0f);   
+            camera.transform.position = new Vector2 (camera.transform.position.x + TILEWIDTH / 100f, 0.0f);   
         }
 
         if (Input.GetKeyDown (moveRight)) {          
-            camera.transform.position = new Vector2 (camera.transform.position.x - TILEWIDTH/100f, 0.0f);   
+            camera.transform.position = new Vector2 (camera.transform.position.x - TILEWIDTH / 100f, 0.0f);   
         }
 
 
@@ -176,7 +184,18 @@ class MapLoader : MonoBehaviour
                 }
                 map.AddLayer (aLayer);
             }
-      
+
+            //Loop the Object Groups
+            foreach (XmlNode anObjectGroup in node.SelectNodes("objectgroup")) {               
+                string groupName = anObjectGroup.Attributes ["name"].Value;
+                ObjectGroup objectGroup = new ObjectGroup(groupName);
+                foreach (XmlNode anObject in anObjectGroup.SelectNodes("//objectgroup[@name='"+groupName+"']/object")) {
+                    string objName = anObject.Attributes ["name"].Value;
+                    MapObject mo = new MapObject(objName);
+                    objectGroup.AddObject(mo);
+                }
+                map.AddPbjectGroup (objectGroup);
+            }
         }
 
         return map;
