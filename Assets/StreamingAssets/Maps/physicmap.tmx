@@ -13,32 +13,27 @@
  </tileset>
  <layer name="Tile Layer 1" width="20" height="30">
   <data>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="1"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
+   <tile gid="14"/>
+   <tile gid="19"/>
+   <tile gid="19"/>
+   <tile gid="19"/>
+   <tile gid="19"/>
+   <tile gid="19"/>
+   <tile gid="19"/>
+   <tile gid="19"/>
+   <tile gid="19"/>
+   <tile gid="19"/>
+   <tile gid="19"/>
+   <tile gid="19"/>
+   <tile gid="19"/>
+   <tile gid="19"/>
+   <tile gid="19"/>
+   <tile gid="19"/>
+   <tile gid="19"/>
+   <tile gid="19"/>
+   <tile gid="19"/>
+   <tile gid="14"/>
+   <tile gid="20"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -53,6 +48,11 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="18"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -593,6 +593,7 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
+   <tile gid="4"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -611,8 +612,7 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="1"/>
+   <tile gid="2"/>
   </data>
  </layer>
  <objectgroup name="Colliders Layer" width="20" height="30">
@@ -622,5 +622,9 @@
    <polygon points="0,0 64,-64 64,0 32,0"/>
   </object>
   <object name="Platform" type="BoxCollider2d" x="64" y="240" width="80" height="80"/>
+  <object name="TopLeft" type="BoxCollider2d" x="0" y="0" width="16" height="16"/>
+  <object name="TopRight" type="BoxCollider2d" x="304" y="0" width="16" height="16"/>
+  <object name="BottomRight" type="BoxCollider2d" x="304" y="464" width="16" height="16"/>
+  <object name="BottomLeft" type="BoxCollider2d" x="0" y="464" width="16" height="16"/>
  </objectgroup>
 </map>

@@ -31,7 +31,7 @@ namespace Untiled2D
             this.name = name;
         }
 
-        public List<Tile> getTiles ()
+        public List<Tile> GetTiles ()
         {
             return tiles;
         }

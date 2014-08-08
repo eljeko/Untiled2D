@@ -38,10 +38,15 @@ class MapLoader : MonoBehaviour
     public bool drawOnStrat = false;
     //
     private Texture2D tilesTexture;
-    private GameObject tilesparent;
+    private GameObject mapParent;
     private int TILEWIDTH = 0;
     private int TILEHEIGHT = 0;
- 
+    //
+    float TILEWIDTH_to_world_units = 0f;
+    float TILEHEIGHT_to_world_units = 0f;
+    
+    
+    
     void Start ()
     {
 
@@ -53,19 +58,22 @@ class MapLoader : MonoBehaviour
         XmlDocument xmlDoc = new XmlDocument ();
         xmlDoc.LoadXml (xmldata);
              
-        map = CreateMap (xmlDoc.SelectNodes ("map"));
+        map = ParseMap (xmlDoc.SelectNodes ("map"));
 
         TILEHEIGHT = map.tileheight;
         TILEWIDTH = map.tilewidth;
+        //Calculat the Tile w/h in world units
+        TILEWIDTH_to_world_units = TILEWIDTH / 100f;
+        TILEHEIGHT_to_world_units = TILEHEIGHT / 100f;
 
         tilesTexture = new Texture2D (map.imagewidth, map.imageheight);
         tilesTexture.LoadImage (System.IO.File.ReadAllBytes (Application.streamingAssetsPath + "/Maps/" + map.imagesrc));
         tilesTexture.name = "Tileset"; 
 
-        tilesparent = Instantiate (Resources.Load ("Dummy")) as GameObject;
-        tilesparent.name = "TileMap [" + map.imagesrc + "]";
+        mapParent = Instantiate (Resources.Load ("Dummy")) as GameObject;
+        mapParent.name = "TileMap [" + map.imagesrc + "]";
 
-        tilesparent.transform.position = new Vector3 (0, 0, 0.0f);
+        mapParent.transform.position = new Vector3 (0, 0, 0.0f);
 
         if (drawOnStrat) {
             DrawMap (startOffsetX, startOffsetY);
@@ -79,7 +87,7 @@ class MapLoader : MonoBehaviour
         if (Input.GetKeyDown (printInfoKey)) {  
             PrintMapInfo (map);
             if (infolabel != null) {
-                infolabel.text = "MAP " + map.ToString () + " Tiles on layer 0 " + map.GetLayer (0).getTiles ().Count;
+                infolabel.text = "MAP " + map.ToString () + " Tiles on layer 0 " + map.GetLayer (0).GetTiles ().Count;
             }
         }
 
@@ -87,7 +95,7 @@ class MapLoader : MonoBehaviour
             if (infolabel != null) {
                 int gid = 16;
                 infolabel.text = "Created tile gid: " + gid;
-                CreateTile (gid, 0.0f, 0.0f, 0.0f, TILEWIDTH, TILEHEIGHT, tilesparent);   
+                CreateTile (gid, 0.0f, 0.0f, 0.0f, TILEWIDTH, TILEHEIGHT, mapParent);   
             }
         }
 
@@ -111,12 +119,50 @@ class MapLoader : MonoBehaviour
 
     void DrawMap (int offsetx, int offsety)
     {
+        DrawLayers (offsetx, offsety);
+        DrawObjects (offsetx, offsety);
+    }
+
+    void DrawObjects (int offsetx, int offsety)
+    {
+        foreach (ObjectGroup anObjectGroup in map.GetObjectGroup()) { 
+
+            GameObject objectGroupParent = Instantiate (Resources.Load ("Dummy")) as GameObject;
+            objectGroupParent.name = "ObjectGroups: " + anObjectGroup.name;
+
+            foreach (MapObject aMapObject in anObjectGroup.GetMapObjects()) {
+
+                if (aMapObject.type.Equals ("BoxCollider2d")) {
+
+                    GameObject boxColliderParent = Instantiate (Resources.Load ("Dummy")) as GameObject;
+                    boxColliderParent.name = "Collider: " + aMapObject.name;
+
+                    BoxCollider2D aBoxCollider = boxColliderParent.AddComponent<BoxCollider2D> ();
+
+                    aBoxCollider.size = new Vector2 (aMapObject.width / 100f, aMapObject.height / 100f);
+
+                    float x = offsetx/100f + ((aMapObject.x + aMapObject.width / 2) / 100f);
+                    float y = offsety/100f +  (-1* (aMapObject.y +aMapObject.height/2)  / 100f);
+
+                    boxColliderParent.transform.position = new Vector2 (x, y);
+                    
+                    boxColliderParent.transform.parent = objectGroupParent.transform;
+
+                }
+            }
+   
+            objectGroupParent.transform.parent = mapParent.transform;
+
+        }
+    }
+
+    void DrawLayers (int offsetx, int offsety)
+    {
 
         int width = map.width;
         int height = map.height;
 
-        float TILEWIDTH_to_world_units = TILEWIDTH / 100f;
-        float TILEHEIGHT_to_world_units = TILEHEIGHT / 100f;
+  
     
         int currentLayer = map.GetLayers ().Count;
 
@@ -126,14 +172,15 @@ class MapLoader : MonoBehaviour
             float xPos = 0;
             float yPos = 0;
             GameObject layerparent = Instantiate (Resources.Load ("Dummy")) as GameObject;
-            layerparent.name = aLayer.name;
+            layerparent.name = "Layer: " + aLayer.name;
 
             Debug.Log ("Drawing " + aLayer.name);
 
-            foreach (Tile aTile in aLayer.getTiles()) {
+            foreach (Tile aTile in aLayer.GetTiles()) {
+
                 if (aTile.gid != 0) {
-                    xPos = offsetx + (currentCol * TILEWIDTH_to_world_units);
-                    yPos = offsety + (currentRow * TILEHEIGHT_to_world_units * -1);                    
+                    xPos = offsetx / 100f + (currentCol * TILEWIDTH_to_world_units);
+                    yPos = offsety / 100f + (currentRow * TILEHEIGHT_to_world_units * -1);                    
                     CreateTile (aTile.gid, xPos, yPos, currentLayer, TILEWIDTH, TILEHEIGHT, layerparent);  
                 }
                 
@@ -146,11 +193,11 @@ class MapLoader : MonoBehaviour
                 }
             }
             currentLayer--;
-            layerparent.transform.parent = tilesparent.transform;
+            layerparent.transform.parent = mapParent.transform;
         }
     }
     
-    private Map CreateMap (XmlNodeList nodes)
+    private Map ParseMap (XmlNodeList nodes)
     {
         Map map = new Map ();
 
@@ -188,13 +235,34 @@ class MapLoader : MonoBehaviour
             //Loop the Object Groups
             foreach (XmlNode anObjectGroup in node.SelectNodes("objectgroup")) {               
                 string groupName = anObjectGroup.Attributes ["name"].Value;
-                ObjectGroup objectGroup = new ObjectGroup(groupName);
+                ObjectGroup objectGroup = new ObjectGroup (groupName);
                 foreach (XmlNode anObject in anObjectGroup.SelectNodes("//objectgroup[@name='"+groupName+"']/object")) {
                     string objName = anObject.Attributes ["name"].Value;
-                    MapObject mo = new MapObject(objName);
-                    objectGroup.AddObject(mo);
+
+                    MapObject mo = new MapObject (objName);
+
+                    int x = Convert.ToInt16 (anObject.Attributes ["x"].Value);
+                    int y = Convert.ToInt16 (anObject.Attributes ["y"].Value);
+                   
+                    if (anObject.Attributes ["width"] != null) {
+                        int width = Convert.ToInt16 (anObject.Attributes ["width"].Value);
+                        mo.width = width;
+                    }
+
+                    if (anObject.Attributes ["height"] != null) {
+                        int height = Convert.ToInt16 (anObject.Attributes ["height"].Value);
+                        mo.height = height;
+                    }
+
+                    string type = anObject.Attributes ["type"].Value;
+
+                    mo.type = type; 
+                    mo.x = x;
+                    mo.y = y;
+                  
+                    objectGroup.AddObject (mo);
                 }
-                map.AddPbjectGroup (objectGroup);
+                map.AddObjectGroup (objectGroup);
             }
         }
 
@@ -248,7 +316,10 @@ class MapLoader : MonoBehaviour
             newTile.name = "Tile g:" + gid + " at (" + x + ":" + y + ")";
 
             SpriteRenderer renderer = newTile.AddComponent<SpriteRenderer> ();
-            Sprite sprite = Sprite.Create (tilesTexture, new Rect (tile_x, tile_y, TILEWIDTH, TILEHEIGHT), new Vector2 (0f, 0f), 100);
+            Sprite sprite = Sprite.Create (tilesTexture, 
+                                           new Rect (tile_x, tile_y, TILEWIDTH, TILEHEIGHT), 
+                                           new Vector2 (0.0f, 1.0f),//the pivot is relative 1 is max 0.5 half 0.0 min 
+                                           100);
             //we want pixelperfect!
             sprite.texture.filterMode = FilterMode.Point;//This disable the antialias filter         
             sprite.name = "Tile Sprite gid:" + gid;

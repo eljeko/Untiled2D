@@ -68,9 +68,14 @@ namespace Untiled2D
             return layers [i];
         }
 
-        public void AddPbjectGroup (ObjectGroup objectGroup)
+        public void AddObjectGroup (ObjectGroup objectGroup)
         {
             objectGroups.Add (objectGroup);
+        }
+
+        public List<ObjectGroup> GetObjectGroup ()
+        {
+            return objectGroups;
         }
         
         public override string ToString ()
