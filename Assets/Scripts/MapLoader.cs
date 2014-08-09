@@ -368,7 +368,8 @@ class MapLoader : MonoBehaviour
                                            new Vector2 (0.0f, 1.0f),//the pivot is relative 1 is max 0.5 half 0.0 min 
                                            100);
             //we want pixelperfect!
-            sprite.texture.filterMode = FilterMode.Point;//This disable the antialias filter         
+            sprite.texture.filterMode = FilterMode.Point;//This disable the antialias filter  
+            sprite.texture.wrapMode = TextureWrapMode.Clamp;
             sprite.name = "Tile Sprite gid:" + gid;
             renderer.sprite = sprite;
 
