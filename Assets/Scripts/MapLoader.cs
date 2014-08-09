@@ -18,6 +18,7 @@
 using UnityEngine;
 using System.Xml;
 using System.Collections;
+using System.Collections.Generic;
 using System;
 using Untiled2D;
 
@@ -44,8 +45,6 @@ class MapLoader : MonoBehaviour
     //
     float TILEWIDTH_to_world_units = 0f;
     float TILEHEIGHT_to_world_units = 0f;
-    
-    
     
     void Start ()
     {
@@ -141,14 +140,48 @@ class MapLoader : MonoBehaviour
 
                     aBoxCollider.size = new Vector2 (aMapObject.width / 100f, aMapObject.height / 100f);
 
-                    float x = offsetx/100f + ((aMapObject.x + aMapObject.width / 2) / 100f);
-                    float y = offsety/100f +  (-1* (aMapObject.y +aMapObject.height/2)  / 100f);
+                    float x = offsetx / 100f + ((aMapObject.x + aMapObject.width / 2) / 100f);
+                    float y = offsety / 100f + (-1 * (aMapObject.y + aMapObject.height / 2) / 100f);
 
                     boxColliderParent.transform.position = new Vector2 (x, y);
                     
                     boxColliderParent.transform.parent = objectGroupParent.transform;
 
                 }
+
+                if (aMapObject.type.Equals ("PolygonCollider2d")) {
+                    
+                    GameObject boxColliderParent = Instantiate (Resources.Load ("Dummy")) as GameObject;
+                    boxColliderParent.name = "Collider: " + aMapObject.name;
+                    
+                    PolygonCollider2D aPolygonCollider2D = boxColliderParent.AddComponent<PolygonCollider2D> ();
+ 
+                    List<Vector2> pathPoints = new List<Vector2> ();
+
+                    foreach (PolygonPoint aPoint in aMapObject.GetPoints()) { 
+                        float px = offsetx / 100f + (aMapObject.x + aPoint.x) / 100f;
+                        float py = offsety / 100f + (-1 * (aMapObject.y + aPoint.y) / 100f);
+                       
+                        Vector2 p = new Vector2 (px, py);
+                        pathPoints.Add (p);
+                    }
+
+                    Vector2[] path = pathPoints.ToArray ();
+
+                    aPolygonCollider2D.SetPath (0, path);
+                    /*
+                    aBoxCollider.size = new Vector2 (aMapObject.width / 100f, aMapObject.height / 100f);
+                    */
+
+                    float x = offsetx / 100f + ((aMapObject.x + aMapObject.width / 2) / 100f);
+                    float y = offsety / 100f + (-1 * (aMapObject.y + aMapObject.height / 2) / 100f);
+                    
+                    boxColliderParent.transform.position = new Vector2 (x, y);
+                    
+                    boxColliderParent.transform.parent = objectGroupParent.transform;
+                    
+                }
+
             }
    
             objectGroupParent.transform.parent = mapParent.transform;
@@ -237,30 +270,44 @@ class MapLoader : MonoBehaviour
                 string groupName = anObjectGroup.Attributes ["name"].Value;
                 ObjectGroup objectGroup = new ObjectGroup (groupName);
                 foreach (XmlNode anObject in anObjectGroup.SelectNodes("//objectgroup[@name='"+groupName+"']/object")) {
-                    string objName = anObject.Attributes ["name"].Value;
+                    if (anObject.Attributes ["name"] != null) {
+                        string objName = anObject.Attributes ["name"].Value;
 
-                    MapObject mo = new MapObject (objName);
+                        MapObject mo = new MapObject (objName);
 
-                    int x = Convert.ToInt16 (anObject.Attributes ["x"].Value);
-                    int y = Convert.ToInt16 (anObject.Attributes ["y"].Value);
+                        int x = Convert.ToInt16 (anObject.Attributes ["x"].Value);
+                        int y = Convert.ToInt16 (anObject.Attributes ["y"].Value);
                    
-                    if (anObject.Attributes ["width"] != null) {
-                        int width = Convert.ToInt16 (anObject.Attributes ["width"].Value);
-                        mo.width = width;
-                    }
+                        if (anObject.Attributes ["width"] != null) {
+                            int width = Convert.ToInt16 (anObject.Attributes ["width"].Value);
+                            mo.width = width;
+                        }
 
-                    if (anObject.Attributes ["height"] != null) {
-                        int height = Convert.ToInt16 (anObject.Attributes ["height"].Value);
-                        mo.height = height;
-                    }
+                        if (anObject.Attributes ["height"] != null) {
+                            int height = Convert.ToInt16 (anObject.Attributes ["height"].Value);
+                            mo.height = height;
+                        }
 
-                    string type = anObject.Attributes ["type"].Value;
+                        string type = anObject.Attributes["type"].Value;
 
-                    mo.type = type; 
-                    mo.x = x;
-                    mo.y = y;
+                        if (type.Equals ("PolygonCollider2d")) {
+                            XmlNode polygonInfo = anObjectGroup.SelectSingleNode ("//objectgroup[@name='" + groupName + "']/object[@name='" + objName + "']/polygon");
+
+                            string pointsAsString = polygonInfo.Attributes ["points"].Value;
+                            string[] pointsSplit = pointsAsString.Split (' ');
+
+                            foreach (string aPoint in pointsSplit) {
+                                PolygonPoint polygonPoint = new PolygonPoint (aPoint); 
+                                mo.AddPoint (polygonPoint);
+                            }
+                        }
+
+                        mo.type = type; 
+                        mo.x = x;
+                        mo.y = y;
                   
-                    objectGroup.AddObject (mo);
+                        objectGroup.AddObject (mo);
+                    }
                 }
                 map.AddObjectGroup (objectGroup);
             }

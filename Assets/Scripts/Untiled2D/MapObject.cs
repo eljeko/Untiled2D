@@ -16,10 +16,24 @@
  * 
  */
 using System;
+using System.Collections.Generic;
+
 namespace Untiled2D
 {
     public class MapObject
     {
+        private List<PolygonPoint> points = new List<PolygonPoint> ();
+
+        public void AddPoint (PolygonPoint point)
+        {
+            points.Add(point);
+        }
+
+        public List<PolygonPoint> GetPoints()
+        {
+            return points;
+        }
+
         public int y { get; set; }
 
         public int x { get; set; }
