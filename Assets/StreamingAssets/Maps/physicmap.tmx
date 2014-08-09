@@ -11,7 +11,7 @@
    </properties>
   </tile>
  </tileset>
- <layer name="Tile Layer 2" width="20" height="30">
+ <layer name="Tile Layer 2" width="20" height="30" visible="0">
   <data>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -187,11 +187,8 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="105"/>
    <tile gid="0"/>
-   <tile gid="105"/>
    <tile gid="0"/>
-   <tile gid="105"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -206,13 +203,6 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="105"/>
-   <tile gid="105"/>
-   <tile gid="105"/>
-   <tile gid="105"/>
-   <tile gid="105"/>
-   <tile gid="105"/>
-   <tile gid="105"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -227,11 +217,8 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="105"/>
    <tile gid="0"/>
-   <tile gid="105"/>
    <tile gid="0"/>
-   <tile gid="105"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -246,13 +233,6 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="105"/>
-   <tile gid="105"/>
-   <tile gid="105"/>
-   <tile gid="105"/>
-   <tile gid="105"/>
-   <tile gid="105"/>
-   <tile gid="105"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -267,11 +247,8 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="105"/>
    <tile gid="0"/>
-   <tile gid="105"/>
    <tile gid="0"/>
-   <tile gid="105"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -286,13 +263,6 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="105"/>
-   <tile gid="105"/>
-   <tile gid="105"/>
-   <tile gid="105"/>
-   <tile gid="105"/>
-   <tile gid="105"/>
-   <tile gid="105"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -307,11 +277,8 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="105"/>
    <tile gid="0"/>
-   <tile gid="105"/>
    <tile gid="0"/>
-   <tile gid="105"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -326,13 +293,6 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="105"/>
-   <tile gid="105"/>
-   <tile gid="105"/>
-   <tile gid="105"/>
-   <tile gid="105"/>
-   <tile gid="105"/>
-   <tile gid="105"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -347,11 +307,51 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="105"/>
    <tile gid="0"/>
-   <tile gid="105"/>
    <tile gid="0"/>
-   <tile gid="105"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -714,6 +714,26 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="1"/>
+   <tile gid="5"/>
+   <tile gid="1"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="5"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="1"/>
+   <tile gid="1"/>
+   <tile gid="1"/>
+   <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="1"/>
    <tile gid="0"/>
@@ -732,46 +752,6 @@
    <tile gid="0"/>
    <tile gid="1"/>
    <tile gid="1"/>
-   <tile gid="1"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="1"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="1"/>
-   <tile gid="1"/>
-   <tile gid="0"/>
-   <tile gid="1"/>
-   <tile gid="0"/>
-   <tile gid="1"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="1"/>
-   <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="1"/>
    <tile gid="0"/>
@@ -792,41 +772,10 @@
    <tile gid="0"/>
    <tile gid="1"/>
    <tile gid="0"/>
-   <tile gid="1"/>
-   <tile gid="1"/>
    <tile gid="0"/>
    <tile gid="1"/>
    <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
    <tile gid="1"/>
-   <tile gid="1"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="1"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -834,11 +783,62 @@
    <tile gid="5"/>
    <tile gid="0"/>
    <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="1"/>
+   <tile gid="0"/>
+   <tile gid="1"/>
+   <tile gid="1"/>
+   <tile gid="0"/>
+   <tile gid="1"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="1"/>
+   <tile gid="1"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="1"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
    <tile gid="26"/>
    <tile gid="27"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="0"/>
+   <tile gid="5"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -975,7 +975,7 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="1"/>
-   <tile gid="1"/>
+   <tile gid="5"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -1015,11 +1015,11 @@
    <tile gid="1"/>
    <tile gid="0"/>
    <tile gid="0"/>
+   <tile gid="5"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
+   <tile gid="5"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -1059,7 +1059,7 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="0"/>
+   <tile gid="5"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -1119,7 +1119,7 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="0"/>
+   <tile gid="5"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -1230,7 +1230,31 @@
   <object name="Trianlge" type="PolygonCollider2d" x="224" y="224">
    <polygon points="0,0 64,0 64,-64"/>
   </object>
-  <object name="PolyTest" type="PolygonCollider2d" x="240" y="160">
+  <object name="PolyTest" type="PolygonCollider2d" x="48" y="80">
+   <polygon points="0,0 0,16 -16,16 -16,0"/>
+  </object>
+  <object name="PolyTest" type="PolygonCollider2d" x="64" y="128">
+   <polygon points="0,0 0,16 -16,16 -16,0"/>
+  </object>
+  <object name="PolyTest" type="PolygonCollider2d" x="32" y="176">
+   <polygon points="0,0 0,16 -16,16 -16,0"/>
+  </object>
+  <object name="PolyTest" type="PolygonCollider2d" x="288" y="64">
+   <polygon points="0,0 0,16 -16,16 -16,0"/>
+  </object>
+  <object name="PolyTest" type="PolygonCollider2d" x="304" y="272">
+   <polygon points="0,0 0,16 -16,16 -16,0"/>
+  </object>
+  <object name="PolyTest" type="PolygonCollider2d" x="48" y="352">
+   <polygon points="0,0 0,16 -16,16 -16,0"/>
+  </object>
+  <object name="PolyTest" type="PolygonCollider2d" x="48" y="320">
+   <polygon points="0,0 0,16 -16,16 -16,0"/>
+  </object>
+  <object name="PolyTest" type="PolygonCollider2d" x="48" y="400">
+   <polygon points="0,0 0,16 -16,16 -16,0"/>
+  </object>
+  <object name="PolyTest" type="PolygonCollider2d" x="304" y="304">
    <polygon points="0,0 0,16 -16,16 -16,0"/>
   </object>
  </objectgroup>

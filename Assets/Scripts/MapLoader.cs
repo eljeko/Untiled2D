@@ -159,7 +159,7 @@ class MapLoader : MonoBehaviour
                     List<Vector2> pathPoints = new List<Vector2> ();
 
                     foreach (PolygonPoint aPoint in aMapObject.GetPoints()) { 
-                        float px = offsetx / 100f + (aMapObject.x + aPoint.x) / 100f;
+                        float px = offsetx / 100f + (aMapObject.x + aPoint.x ) / 100f;
                         float py = offsety / 100f + (-1 * (aMapObject.y + aPoint.y) / 100f);
                        
                         Vector2 p = new Vector2 (px, py);
@@ -173,10 +173,10 @@ class MapLoader : MonoBehaviour
                     aBoxCollider.size = new Vector2 (aMapObject.width / 100f, aMapObject.height / 100f);
                     */
 
-                    float x = offsetx / 100f + ((aMapObject.x + aMapObject.width / 2) / 100f);
-                    float y = offsety / 100f + (-1 * (aMapObject.y + aMapObject.height / 2) / 100f);
+                  //  float x = offsetx / 100f + ((aMapObject.x + aMapObject.width / 2) / 100f);
+                  //  float y = offsety / 100f + (-1 * (aMapObject.y + aMapObject.height / 2) / 100f);
                     
-                    boxColliderParent.transform.position = new Vector2 (x, y);
+                    //boxColliderParent.transform.position = new Vector2 (x, y);
                     
                     boxColliderParent.transform.parent = objectGroupParent.transform;
                     
