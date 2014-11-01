@@ -69,30 +69,35 @@ class Untiled2DWindow : EditorWindow
                 parentPath = path.Substring (0, path.LastIndexOf ("\\") + 1); 
             }
 
-            string xmldata = System.IO.File.ReadAllText (path);
+            if (path.Trim().Length  > 0) {
 
-            //Create a new XML document out of the loaded data
-            XmlDocument xmlDoc = new XmlDocument ();
-            xmlDoc.LoadXml (xmldata);
             
-            map = ParseMap (xmlDoc.SelectNodes ("map"));
+                string xmldata = System.IO.File.ReadAllText (path);
+
+                //Create a new XML document out of the loaded data
+                XmlDocument xmlDoc = new XmlDocument ();
+                xmlDoc.LoadXml (xmldata);
             
-            TILEHEIGHT = map.tileheight;
-            TILEWIDTH = map.tilewidth;
-            //Calculat the Tile w/h in world units
-            TILEWIDTH_to_world_units = TILEWIDTH / 100f;
-            TILEHEIGHT_to_world_units = TILEHEIGHT / 100f;
+                map = ParseMap (xmlDoc.SelectNodes ("map"));
             
-            tilesTexture = new Texture2D (map.imagewidth, map.imageheight);
-            tilesTexture.LoadImage (System.IO.File.ReadAllBytes (parentPath + map.imagesrc));
-            tilesTexture.name = "Tileset"; 
+                TILEHEIGHT = map.tileheight;
+                TILEWIDTH = map.tilewidth;
+                //Calculat the Tile w/h in world units
+                TILEWIDTH_to_world_units = TILEWIDTH / 100f;
+                TILEHEIGHT_to_world_units = TILEHEIGHT / 100f;
             
-            mapParent = Instantiate (Resources.Load ("Dummy")) as GameObject;
-            mapParent.name = "TileMap [" + map.imagesrc + "]";
+                tilesTexture = new Texture2D (map.imagewidth, map.imageheight);
+                tilesTexture.LoadImage (System.IO.File.ReadAllBytes (parentPath + map.imagesrc));
+                tilesTexture.name = "Tileset"; 
             
-            mapParent.transform.position = new Vector3 (0, 0, 0.0f);
+                mapParent = Instantiate (Resources.Load ("Dummy")) as GameObject;
+                mapParent.name = "TileMap [" + map.imagesrc + "]";
+            
+                mapParent.transform.position = new Vector3 (0, 0, 0.0f);
                          
-            DrawMap (startOffsetX, startOffsetY);             
+                DrawMap (startOffsetX, startOffsetY);     
+
+            }
             
         }
 
@@ -333,7 +338,7 @@ class Untiled2DWindow : EditorWindow
                                            100);
             //we want pixelperfect!
             sprite.texture.filterMode = FilterMode.Point;//This disable the antialias filter  
-            sprite.texture.wrapMode = TextureWrapMode.Clamp;
+            sprite.texture.wrapMode = TextureWrapMode.Repeat;
             sprite.name = "Tile Sprite gid:" + gid;
             renderer.sprite = sprite;
             
