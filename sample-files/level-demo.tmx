@@ -3,7 +3,7 @@
  <tileset firstgid="1" name="platformtileset" tilewidth="16" tileheight="16">
   <image source="platformtileset.png" width="256" height="256"/>
  </tileset>
- <layer name="BackGground" width="60" height="30">
+ <layer name="BackGround" width="60" height="30">
   <data>
    <tile gid="0"/>
    <tile gid="0"/>
