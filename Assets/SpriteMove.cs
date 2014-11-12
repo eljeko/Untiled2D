@@ -6,6 +6,11 @@ public class SpriteMove : MonoBehaviour
 
     public KeyCode moveRight;
     public KeyCode moveLeft;
+    public KeyCode jump;
+
+    public Vector2 jumpForce = new Vector2 (0, 50);
+
+
     private Animator animator;
     private SpriteRenderer[] renderers;
 
@@ -33,6 +38,10 @@ public class SpriteMove : MonoBehaviour
 
         if (Input.GetKey (moveRight)) {  
              transform.Translate (new Vector2 (-0.03f, 0.0f));
+        }
+        if (Input.GetKeyDown (jump)) {  
+            rigidbody2D.AddForce (jumpForce);               
+            
         }
     }
     
