@@ -362,12 +362,13 @@ class MapLoader : MonoBehaviour
             GameObject newTile = Instantiate (Resources.Load ("Dummy")) as GameObject;
             newTile.name = "Tile g:" + gid + " at (" + x + ":" + y + ")";
 
-            Material pixelMaterial = Resources.Load("PixelMaterial", typeof(Material)) as Material;
+           // Material pixelMaterial = Resources.Load("PixelMaterial", typeof(Material)) as Material;
 
-            SpriteRenderer renderer = newTile.AddComponent<SpriteRenderer> ();
-          
+            //SpriteRenderer renderer = newTile.AddComponent<SpriteRenderer> ();
+            tilesTexture.filterMode = FilterMode.Point;
+            tilesTexture.wrapMode = TextureWrapMode.Clamp;
             Sprite sprite = Sprite.Create (tilesTexture, 
-                                           new Rect (tile_x, tile_y, TILEWIDTH, TILEHEIGHT), 
+                                           new Rect (tile_x+2, tile_y+2, TILEWIDTH-2, TILEHEIGHT-2), 
                                            new Vector2 (0.0f, 1.0f),//the pivot is relative 1 is max 0.5 half 0.0 min 
                                            100);
             //we want pixelperfect!
@@ -378,15 +379,16 @@ class MapLoader : MonoBehaviour
     gameObject.renderer.material = newMat;
              * */
             sprite.texture.filterMode = FilterMode.Point;//This disable the antialias filter  
-            sprite.texture.wrapMode = TextureWrapMode.Clamp;
+            sprite.texture.wrapMode = TextureWrapMode.Repeat;
             sprite.name = "Tile Sprite gid:" + gid;
-            renderer.sprite = sprite;
-            renderer.material = pixelMaterial;
+     //       renderer.sprite = sprite;
+        //    renderer.material = pixelMaterial;
             newTile.transform.position = new Vector3 (x, y, z);
             newTile.transform.parent = tilesparent.transform;
 
         }
     }
+    /*
 
     public Texture2D getTileTexture2D (int x, int y, int width, int height)
     {
@@ -400,7 +402,7 @@ class MapLoader : MonoBehaviour
         // important to save changes
         aTileTexture.Apply ();       
         return aTileTexture;
-    }
+    }*/
 
     private void PrintMapInfo (Map map)
     {

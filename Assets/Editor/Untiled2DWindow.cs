@@ -1,4 +1,4 @@
-﻿/*
+/*
  * 
  * Copyright 2014 Stefano Linguerri
  * 
@@ -18,9 +18,7 @@
 using UnityEngine;
 using UnityEditor;
 using System.Collections;
-using UnityEngine;
 using System.Xml;
-using System.Collections;
 using System.Collections.Generic;
 using System;
 using Untiled2D;
@@ -29,7 +27,7 @@ class Untiled2DWindow : EditorWindow
 {
     //
     private Map map;
-    public string mapFileName;
+    public string mapFileName = "";
     public string mapObjectName = "";
     public int startOffsetX = 0;
     public int startOffsetY = 0;
@@ -42,7 +40,8 @@ class Untiled2DWindow : EditorWindow
     //
     float TILEWIDTH_to_world_units = 0f;
     float TILEHEIGHT_to_world_units = 0f;
-    
+    int _vertexCount = 0;
+
     [MenuItem ("Untiled2D/Importer")]
     
     public static void  ShowWindow ()
@@ -69,7 +68,7 @@ class Untiled2DWindow : EditorWindow
                 parentPath = path.Substring (0, path.LastIndexOf ("\\") + 1); 
             }
 
-            if (path.Trim().Length  > 0) {
+            if (path.Trim ().Length > 0) {
 
             
                 string xmldata = System.IO.File.ReadAllText (path);
@@ -180,28 +179,44 @@ class Untiled2DWindow : EditorWindow
     {
         
         int width = map.width;
-        int height = map.height;
+        //  int height = map.height;
         
         
         
         int currentLayer = map.GetLayers ().Count;
-        
+
+        float z = currentLayer * -10;
+
+        List<Vector3> vertices = new List<Vector3> ();
+        List<Vector2> uv = new List<Vector2> ();
+        List<int> triangles = new List<int> ();
+        Mesh mesh = new Mesh ();
+
         foreach (Layer aLayer in map.GetLayers()) { 
+
             int currentRow = 0;
             int currentCol = 0;
             float xPos = 0;
             float yPos = 0;
-            GameObject layerparent = Instantiate (Resources.Load ("Dummy")) as GameObject;
+            //   GameObject layerparent = Instantiate (Resources.Load ("Dummy")) as GameObject;
+            GameObject layerparent = Instantiate (Resources.Load ("MapMesh")) as GameObject;
             layerparent.name = "Layer: " + aLayer.name;
-            
+            layerparent.transform.position = new Vector2 (offsetx, offsety);
+
             Debug.Log ("Drawing " + aLayer.name);
             
             foreach (Tile aTile in aLayer.GetTiles()) {
                 
                 if (aTile.gid != 0) {
                     xPos = offsetx / 100f + (currentCol * TILEWIDTH_to_world_units);
-                    yPos = offsety / 100f + (currentRow * TILEHEIGHT_to_world_units * -1);                    
-                    CreateTile (aTile.gid, xPos, yPos, currentLayer, TILEWIDTH, TILEHEIGHT, layerparent);  
+                    yPos = offsety / 100f + (currentRow * TILEHEIGHT_to_world_units * -1);   
+
+                
+
+
+                    vertices.AddRange ( renderVertices (currentCol,currentRow, z));
+                    _vertexCount += 4;
+                    // CreateTile (aTile.gid, xPos, yPos, currentLayer, TILEWIDTH, TILEHEIGHT, layerparent);  
                 }
                 
                 if (currentCol < width - 1) {
@@ -212,9 +227,93 @@ class Untiled2DWindow : EditorWindow
                     //  Debug.Log ("New Row " + currentRow);
                 }
             }
+
+             uv.AddRange ( renderUv(aLayer)); 
+            triangles.AddRange (renderTriangles (0, 0 + _vertexCount));
+
+            int currentTri = 0;
+            while (currentTri < _vertexCount) {
+                triangles.AddRange (new int[] {
+                    currentTri, currentTri + 1, currentTri + 2,
+                    currentTri + 2, currentTri + 1, currentTri + 3,
+                });                     
+                currentTri += 4;
+            }
+
+
+          
+
+            mesh.vertices = vertices.ToArray ();    
+            mesh.uv = uv.ToArray ();
+            mesh.triangles = triangles.ToArray ();
+            MeshFilter filter = layerparent.GetComponent<MeshFilter> ();
+            
+            filter.mesh = mesh;
             currentLayer--;
             layerparent.transform.parent = mapParent.transform;
         }
+    }
+
+    public List<Vector3> renderVertices (int currentCol, int currentRow,float z)
+    {
+   
+        List<Vector3> vertices = new List<Vector3> ();
+        vertices.AddRange (new Vector3[] {
+            new Vector3 (TILEWIDTH_to_world_units * (currentCol +1), TILEHEIGHT_to_world_units * (-currentRow + 1), z),
+            new Vector3 (TILEWIDTH_to_world_units * (currentCol + 1), TILEHEIGHT_to_world_units * -currentRow, z),                            
+            new Vector3 (TILEWIDTH_to_world_units * currentCol, TILEHEIGHT_to_world_units * (-currentRow + 1), z),                                
+            new Vector3 (TILEWIDTH_to_world_units * currentCol, TILEHEIGHT_to_world_units * -currentRow, z)
+        }); 
+
+        return vertices;
+    }
+    
+    // Creates the triangles given the ammount of the Used Vertices until now (including other layers).
+    public List<int> renderTriangles (int start, int end)
+    {
+        List<int> triangles = new List<int> ();
+        int currentTri = start;
+        while(currentTri < end) {
+            triangles.AddRange (new int[] {
+                currentTri, currentTri + 1, currentTri + 2,
+                currentTri + 2, currentTri + 1, currentTri + 3,
+            });                     
+            currentTri += 4;
+        }
+        return triangles;
+    }
+    
+    public List<Vector2> renderUv (Layer layer)
+    {
+   
+        List<Vector2> uv = new List<Vector2> (); 
+        int horizontalCellCount = map.imagewidth / (TILEWIDTH + 0);
+        int verticalCellCount = map.imageheight / (TILEHEIGHT + 0);      
+        float cellWidth = ((float)TILEWIDTH / map.imagewidth);
+        float cellHeight = ((float)TILEHEIGHT / map.imageheight);      
+        float borderWidth = ((float)0 / map.imagewidth);
+        float borderHeight = ((float)0 / map.imageheight);
+        int totalCells = map.width * map.height;
+        int dataValue;
+
+        foreach (Tile aTile in layer.GetTiles()) {
+             //   for (int i = 0; i < totalCells; i++) {
+            //     dataValue = int.Parse(_data [i].ToString ().Trim ());
+            if (aTile.gid != 0) {
+                dataValue = aTile.gid;
+                int posY = dataValue / verticalCellCount;
+                int posX = dataValue % horizontalCellCount;                     
+                float u = ((cellWidth + borderWidth) * posX) + borderWidth / 2;
+                float v = 1.0f - ((cellHeight + borderHeight) * posY) - borderHeight / 2;             
+                uv.AddRange (new Vector2[] {
+                    new Vector2 (u + cellWidth, v),
+                    new Vector2 (u + cellWidth, v - cellHeight),
+                    new Vector2 (u, v),
+                    new Vector2 (u, v - cellHeight),                    
+                });
+            }
+        }
+        return uv;
     }
     
     private Map ParseMap (XmlNodeList nodes)
@@ -299,7 +398,7 @@ class Untiled2DWindow : EditorWindow
                 map.AddObjectGroup (objectGroup);
             }
         }
-        
+        Debug.Log ("Import 22");
         return map;
     }
 
@@ -308,7 +407,7 @@ class Untiled2DWindow : EditorWindow
         
         if (gid > 0) {
             int tiles_cols = map.imagewidth / TILEWIDTH;
-            int tiles_rows = map.imageheight / TILEHEIGHT;
+            //     int tiles_rows = map.imageheight / TILEHEIGHT;
             
             int row = 0;
             int col = 0;   
@@ -332,22 +431,42 @@ class Untiled2DWindow : EditorWindow
             newTile.name = "Tile g:" + gid + " at (" + x + ":" + y + ")";
             
             SpriteRenderer renderer = newTile.AddComponent<SpriteRenderer> ();
+
+            // tilesTexture.filterMode = FilterMode.Point;//This disable the antialias filter  
+      
+
+         
             Sprite sprite = Sprite.Create (tilesTexture, 
                                            new Rect (tile_x, tile_y, TILEWIDTH, TILEHEIGHT), 
+                                           new Vector2 (0.5f, 0.5f),//the pivot is relative 1 is max 0.5 half 0.0 min 
+                                           100); 
+            /*Sprite sprite = Sprite.Create (getTileTexture2D(tile_x, tile_y, TILEWIDTH, TILEHEIGHT), 
+                                           new Rect (0, 0, TILEWIDTH, TILEHEIGHT), 
                                            new Vector2 (0.0f, 1.0f),//the pivot is relative 1 is max 0.5 half 0.0 min 
-                                           100);
+                                           100);*/
+
+
             //we want pixelperfect!
+
+            sprite.name = "Tile X Sprite gid:" + gid;
+            renderer.sprite = sprite;
             sprite.texture.filterMode = FilterMode.Point;//This disable the antialias filter  
             sprite.texture.wrapMode = TextureWrapMode.Repeat;
-            sprite.name = "Tile Sprite gid:" + gid;
-            renderer.sprite = sprite;
-            
+
+            //renderer.material.seSetTexture(0,sprite.texture);
+            //  renderer.material.mainTexture =  sprite.texture;
+            // renderer.material.mainTexture.wrapMode = TextureWrapMode.Clamp;
+
             newTile.transform.position = new Vector3 (x, y, z);
             newTile.transform.parent = tilesparent.transform;
+
+
+         
             
         }
+       
     }
-    
+  
     public Texture2D getTileTexture2D (int x, int y, int width, int height)
     {
         // get the block of pixels
