@@ -22,6 +22,7 @@ using System.Collections.Generic;
 using System;
 using Untiled2D;
 
+//Deprecated!
 class MapLoader : MonoBehaviour
 {
     public KeyCode printInfoKey;
@@ -159,7 +160,7 @@ class MapLoader : MonoBehaviour
                     List<Vector2> pathPoints = new List<Vector2> ();
 
                     foreach (PolygonPoint aPoint in aMapObject.GetPoints()) { 
-                        float px = offsetx / 100f + (aMapObject.x + aPoint.x ) / 100f;
+                        float px = offsetx / 100f + (aMapObject.x + aPoint.x) / 100f;
                         float py = offsety / 100f + (-1 * (aMapObject.y + aPoint.y) / 100f);
                        
                         Vector2 p = new Vector2 (px, py);
@@ -173,8 +174,8 @@ class MapLoader : MonoBehaviour
                     aBoxCollider.size = new Vector2 (aMapObject.width / 100f, aMapObject.height / 100f);
                     */
 
-                  //  float x = offsetx / 100f + ((aMapObject.x + aMapObject.width / 2) / 100f);
-                  //  float y = offsety / 100f + (-1 * (aMapObject.y + aMapObject.height / 2) / 100f);
+                    //  float x = offsetx / 100f + ((aMapObject.x + aMapObject.width / 2) / 100f);
+                    //  float y = offsety / 100f + (-1 * (aMapObject.y + aMapObject.height / 2) / 100f);
                     
                     //boxColliderParent.transform.position = new Vector2 (x, y);
                     
@@ -288,7 +289,7 @@ class MapLoader : MonoBehaviour
                             mo.height = height;
                         }
 
-                        string type = anObject.Attributes["type"].Value;
+                        string type = anObject.Attributes ["type"].Value;
 
                         if (type.Equals ("PolygonCollider2d")) {
                             XmlNode polygonInfo = anObjectGroup.SelectSingleNode ("//objectgroup[@name='" + groupName + "']/object[@name='" + objName + "']/polygon");
@@ -362,13 +363,13 @@ class MapLoader : MonoBehaviour
             GameObject newTile = Instantiate (Resources.Load ("Dummy")) as GameObject;
             newTile.name = "Tile g:" + gid + " at (" + x + ":" + y + ")";
 
-           // Material pixelMaterial = Resources.Load("PixelMaterial", typeof(Material)) as Material;
+            // Material pixelMaterial = Resources.Load("PixelMaterial", typeof(Material)) as Material;
 
             //SpriteRenderer renderer = newTile.AddComponent<SpriteRenderer> ();
             tilesTexture.filterMode = FilterMode.Point;
             tilesTexture.wrapMode = TextureWrapMode.Clamp;
             Sprite sprite = Sprite.Create (tilesTexture, 
-                                           new Rect (tile_x+2, tile_y+2, TILEWIDTH-2, TILEHEIGHT-2), 
+                                           new Rect (tile_x + 2, tile_y + 2, TILEWIDTH - 2, TILEHEIGHT - 2), 
                                            new Vector2 (0.0f, 1.0f),//the pivot is relative 1 is max 0.5 half 0.0 min 
                                            100);
             //we want pixelperfect!
@@ -381,8 +382,8 @@ class MapLoader : MonoBehaviour
             sprite.texture.filterMode = FilterMode.Point;//This disable the antialias filter  
             sprite.texture.wrapMode = TextureWrapMode.Repeat;
             sprite.name = "Tile Sprite gid:" + gid;
-     //       renderer.sprite = sprite;
-        //    renderer.material = pixelMaterial;
+            //       renderer.sprite = sprite;
+            //    renderer.material = pixelMaterial;
             newTile.transform.position = new Vector3 (x, y, z);
             newTile.transform.parent = tilesparent.transform;
 

@@ -15,6 +15,7 @@
  * limitations under the License.
  * 
  */
+
 using UnityEngine;
 using UnityEditor;
 using System.Collections;
@@ -252,8 +253,7 @@ public class TiledMapImporter : MonoBehaviour
             
             currentLayer--;
             currentLayerGameObject.transform.parent = mapParent.transform;
-            
-            
+
         }
     }
     
