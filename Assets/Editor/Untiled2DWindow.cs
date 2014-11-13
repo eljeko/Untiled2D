@@ -191,9 +191,9 @@ class Untiled2DWindow : EditorWindow
             List<int> triangles = new List<int> ();
             Mesh mesh = new Mesh ();
 
-            float z = currentLayer * 10;
+            float z = currentLayer;
 
-            int currentRow = 0;
+            int currentRow = 1;
             int currentCol = 0;
             float xPos = 0;
             float yPos = 0;
@@ -202,9 +202,9 @@ class Untiled2DWindow : EditorWindow
             currentLayerGameObject.name = "Layer: " + aLayer.name;
 
             xPos = offsetx / 100f + (TILEWIDTH_to_world_units);
-            yPos = offsety / 100f + (TILEHEIGHT_to_world_units) + 1;  
+            yPos = offsety / 100f - (TILEHEIGHT_to_world_units) ;  
 
-            currentLayerGameObject.transform.position = new Vector2 (offsetx, offsety);
+       //     currentLayerGameObject.transform.position = new Vector2 (offsetx, offsety);
 
             Debug.Log ("Drawing " + aLayer.name + " @ [" + xPos + ":" + yPos + "]");
             
@@ -260,6 +260,7 @@ class Untiled2DWindow : EditorWindow
             material.SetTexture (1, sprite.texture);
 */
             MeshRenderer meshRenderer = currentLayerGameObject.GetComponent<MeshRenderer> ();       
+
           //  tilesTexture.filterMode = FilterMode.Point;//This disable the antialias filter  
           //  tilesTexture.wrapMode = TextureWrapMode.Clamp;
 
@@ -267,6 +268,8 @@ class Untiled2DWindow : EditorWindow
 
             currentLayer--;
             currentLayerGameObject.transform.parent = mapParent.transform;
+
+
         }
     }
 
