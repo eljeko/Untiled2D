@@ -14,7 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
+ * Part of the code of this class to create a Mesh and UV mapping cames from:
+ * 
+ * UniTMX - https://bitbucket.org/PolCPP/unitmx
+ * Copyright (C) 2012 
+ * by Pol Cámara 
+ * 
  */
+
 using UnityEngine;
 using UnityEditor;
 using System.Collections;

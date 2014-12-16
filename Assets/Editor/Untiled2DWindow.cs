@@ -57,6 +57,7 @@ class Untiled2DWindow : EditorWindow
 
         if (GUILayout.Button ("Load Tiled Map", new GUILayoutOption[]{ GUILayout.Width (300)})) {           
             path = EditorUtility.OpenFilePanel ("Load Tiled map file", "", "tmx");
+            Debug.Log (">>> value " + mapObjectName);
             TiledMapImporter tmi = new TiledMapImporter (path);                     
         }
 
