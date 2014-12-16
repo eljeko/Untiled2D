@@ -20,7 +20,7 @@
  * For this Script thanks to:
  * 
  * http://aidtech-game.com/pixel-perfect-camera-unity-2d/
- * bu Alan Mcklin
+ * by Alan Mcklin
  * 
  */
 using UnityEngine;
@@ -35,10 +35,11 @@ public class PixelPerfectCamera : MonoBehaviour
     public float textureUnitsSize = 100f;
     //this will let you do  a 2x,3x,4x perfecet pixel Zoom.
     public int multiplier = 1;
+ 
 
     void Start ()
     {
-        
+ 
         unitsPerPixel = 1f / textureUnitsSize;
         
         Camera.main.orthographicSize = ((Screen.height / 2f) * unitsPerPixel) / multiplier;

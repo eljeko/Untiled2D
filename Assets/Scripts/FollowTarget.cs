@@ -24,7 +24,10 @@ public class FollowTarget : MonoBehaviour
     
     
     public GameObject target;
-    
+
+
+     
+
     void Update ()
     {
         

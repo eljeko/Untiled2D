@@ -15,7 +15,6 @@
  * limitations under the License.
  * 
  */
-
 using UnityEngine;
 using UnityEditor;
 using System.Collections;
@@ -23,6 +22,7 @@ using System.Xml;
 using System.Collections.Generic;
 using System;
 using Untiled2D;
+using System.IO;
  
 public class TiledMapImporter : MonoBehaviour
 {
@@ -39,6 +39,8 @@ public class TiledMapImporter : MonoBehaviour
     private GameObject mapParent;
     private int TILEWIDTH = 0;
     private int TILEHEIGHT = 0;
+    private string parentPath = "";
+
     //
     float TILEWIDTH_to_world_units = 0f;
     float TILEHEIGHT_to_world_units = 0f;
@@ -48,7 +50,6 @@ public class TiledMapImporter : MonoBehaviour
 
         if (path.Trim ().Length > 0) {
 
-            string parentPath = "";
         
             if (Application.platform == RuntimePlatform.OSXEditor) {
                 parentPath = path.Substring (0, path.LastIndexOf ("/") + 1); 
@@ -72,7 +73,7 @@ public class TiledMapImporter : MonoBehaviour
             TILEWIDTH_to_world_units = TILEWIDTH / 100f;
             TILEHEIGHT_to_world_units = TILEHEIGHT / 100f;
             
-            tilesTexture = new Texture2D (map.imagewidth, map.imageheight);
+            tilesTexture = new Texture2D (4, 4);// ( map.imagewidth, map.imageheight);
             tilesTexture.LoadImage (System.IO.File.ReadAllBytes (parentPath + map.imagesrc));
             tilesTexture.name = "Tileset"; 
             
@@ -158,17 +159,26 @@ public class TiledMapImporter : MonoBehaviour
             
         }
     }
+
+    Texture2D GetTilesTexture ()
+    {
+        Texture2D newTexture = new Texture2D (4, 4);
+        byte[] content = System.IO.File.ReadAllBytes (parentPath + map.imagesrc);
+        newTexture.LoadImage (content);
+        newTexture.name = map.imagesrc;
+        newTexture.filterMode = FilterMode.Point;
+        //This disable the antialias filter  
+        newTexture.wrapMode = TextureWrapMode.Clamp;
+        newTexture.anisoLevel = 1;
+        return newTexture;
+    }
     
     void DrawLayers (int offsetx, int offsety)
     {
         
         int width = map.width;
-        
         int currentLayer = map.GetLayers ().Count;
-        
-        
-        
-        
+
         foreach (Layer aLayer in map.GetLayers()) { 
             int currentVertexCount = 0;
             List<Vector3> vertices = new List<Vector3> ();
@@ -224,33 +234,25 @@ public class TiledMapImporter : MonoBehaviour
                 });                     
                 currentTri += 4;
             }
-            
-            
-            
-            
+                                               
             mesh.vertices = vertices.ToArray ();    
             mesh.uv = uv.ToArray ();
             mesh.triangles = triangles.ToArray ();
             
             MeshFilter filter = currentLayerGameObject.GetComponent<MeshFilter> ();            
             filter.mesh = mesh;
-            
-            Material material = new Material ("Default-Sprite");
-            /*
-            Sprite sprite = Sprite.Create (tilesTexture, 
-                                           new Rect (0, 0, map.imagewidth, map.imageheight), 
-                                           new Vector2 (0.5f, 0.5f),//the pivot is relative 1 is max 0.5 half 0.0 min 
-                                           100); 
+             
+            var tilesTexture = GetTilesTexture ();
 
-            material.SetTexture (1, sprite.texture);
-*/
+            Material material = new Material ("Sprites/Default");
+            material.shader = Shader.Find ("Sprites/Default");
+            material.name = map.imagesrc;
+        
+
             MeshRenderer meshRenderer = currentLayerGameObject.GetComponent<MeshRenderer> ();       
-            
-            //  tilesTexture.filterMode = FilterMode.Point;//This disable the antialias filter  
-            //  tilesTexture.wrapMode = TextureWrapMode.Clamp;
-            
-            //    meshRenderer.renderer.materials[0].SetTexture(0,tilesTexture);
-            
+            meshRenderer.sharedMaterial = material;
+            meshRenderer.sharedMaterial.mainTexture = tilesTexture;
+ 
             currentLayer--;
             currentLayerGameObject.transform.parent = mapParent.transform;
 
